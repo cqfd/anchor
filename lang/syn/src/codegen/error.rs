@@ -40,6 +40,20 @@ pub fn generate(error: Error) -> proc_macro2::TokenStream {
         }
     };
 
+    let error_code_dispatch: Vec<proc_macro2::TokenStream> = error
+        .raw_enum
+        .variants
+        .iter()
+        .enumerate()
+        .map(|(idx, variant)| {
+            let idx = idx as u32;
+            let ident = &variant.ident;
+            quote! {
+                #idx => ::anchor_lang::solana_program::msg!("Custom error ({:?}): {}", #enum_name::#ident, #enum_name::#ident)
+            }
+        })
+        .collect();
+
     quote! {
         /// Anchor generated Result to be used as the return type for the
         /// program.
@@ -85,6 +99,13 @@ pub fn generate(error: Error) -> proc_macro2::TokenStream {
                 let err: Error = e.into();
                 err.into()
             }
+        }
+
+        fn __pretty_print_custom_program_error_code(code: u32) {
+            let _ = match code - #offset {
+                #(#error_code_dispatch),*
+                , _ => panic!("Hmm")
+            };
         }
     }
 }

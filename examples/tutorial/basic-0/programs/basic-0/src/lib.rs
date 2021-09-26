@@ -6,9 +6,17 @@ declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 mod basic_0 {
     use super::*;
     pub fn initialize(_ctx: Context<Initialize>) -> ProgramResult {
-        Ok(())
+        Err(CustomError::SomethingElse.into())
     }
 }
 
 #[derive(Accounts)]
 pub struct Initialize {}
+
+#[error]
+pub enum CustomError {
+    #[msg("Something went wrong!")]
+    Whoops,
+    #[msg("Something else went wrong!")]
+    SomethingElse,
+}
