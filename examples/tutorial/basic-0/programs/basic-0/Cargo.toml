@@ -14,3 +14,4 @@ cpi = ["no-entrypoint"]
 
 [dependencies]
 anchor-lang = { path = "../../../../../lang" }
+pubkey = { path = "./src/pubkey" }
