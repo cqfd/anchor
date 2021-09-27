@@ -1,8 +1,7 @@
 extern crate proc_macro;
 
-use proc_macro2::Span;
 use quote::quote;
-use syn::{parse_macro_input, LitByte, LitStr};
+use syn::parse_macro_input;
 
 mod id;
 
