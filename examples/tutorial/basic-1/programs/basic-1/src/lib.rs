@@ -1,3 +1,5 @@
+mod math;
+
 use anchor_lang::prelude::*;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
@@ -7,6 +9,7 @@ mod basic_1 {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>, data: u64) -> ProgramResult {
+        let x = math::example();
         let my_account = &mut ctx.accounts.my_account;
         my_account.data = data;
         Ok(())
