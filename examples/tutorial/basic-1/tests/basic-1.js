@@ -62,4 +62,36 @@ describe("basic-1", () => {
 
     // #endregion update-test
   });
+
+  it("Can tranfer lamports", async () => {
+    const program = anchor.workspace.Basic1;
+
+    let from = anchor.web3.Keypair.generate();
+    let to = anchor.web3.Keypair.generate();
+
+    let startingAmount = 200000000000;
+
+
+    await provider.connection.confirmTransaction(
+      await provider.connection.requestAirdrop(from.publicKey, startingAmount)
+    , "confirmed");
+    await provider.connection.confirmTransaction(
+      await provider.connection.requestAirdrop(to.publicKey, startingAmount)
+    , "confirmed");
+
+
+    await program.rpc.transfer(new anchor.BN(123), {
+      accounts: {
+        from: from.publicKey,
+        to: to.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId
+      },
+      signers: [from]
+    });
+
+    const fromAccount = await provider.connection.getAccountInfo(from.publicKey);
+    const toAccount = await provider.connection.getAccountInfo(to.publicKey);
+
+    assert.equal(toAccount.lamports, 123 + startingAmount);
+  });
 });
