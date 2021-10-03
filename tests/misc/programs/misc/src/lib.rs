@@ -30,7 +30,9 @@ pub mod misc {
 
         pub fn remaining_accounts(&mut self, ctx: Context<RemainingAccounts>) -> ProgramResult {
             if ctx.remaining_accounts.len() != 1 {
-                return Err(ProgramError::Custom(1)); // Arbitrary error.
+                return Err(
+                    anchor_lang::solana_program::program_error::ProgramError::Custom(1).into(),
+                ); // Arbitrary error.
             }
             Ok(())
         }
@@ -127,7 +129,7 @@ pub mod misc {
         _program_id: &Pubkey,
         _accounts: &[AccountInfo<'info>],
         _data: &[u8],
-    ) -> ProgramResult {
+    ) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
         Err(anchor_lang::solana_program::program_error::ProgramError::Custom(1234))
     }
 

@@ -14,16 +14,19 @@ pub mod basic_4 {
     }
 
     impl Counter {
-        pub fn new(ctx: Context<Auth>) -> Result<Self> {
+        pub fn new(
+            ctx: Context<Auth>,
+        ) -> std::result::Result<Self, anchor_lang::solana_program::program_error::ProgramError>
+        {
             Ok(Self {
                 authority: *ctx.accounts.authority.key,
                 count: 0,
             })
         }
 
-        pub fn increment(&mut self, ctx: Context<Auth>) -> Result<()> {
+        pub fn increment(&mut self, ctx: Context<Auth>) -> std::result::Result<(), ErrorCode> {
             if &self.authority != ctx.accounts.authority.key {
-                return Err(ErrorCode::Unauthorized.into());
+                return Err(ErrorCode::Unauthorized);
             }
             self.count += 1;
             Ok(())

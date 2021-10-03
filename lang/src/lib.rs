@@ -92,6 +92,12 @@ pub trait AnchorError: std::fmt::Display {
     fn to_program_error(&self) -> solana_program::program_error::ProgramError;
 }
 
+impl AnchorError for solana_program::program_error::ProgramError {
+    fn to_program_error(&self) -> solana_program::program_error::ProgramError {
+        self.clone()
+    }
+}
+
 impl<E: AnchorError + 'static> From<E> for Box<dyn AnchorError> {
     fn from(e: E) -> Self {
         Box::new(e)

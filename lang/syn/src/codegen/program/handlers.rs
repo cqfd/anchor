@@ -256,7 +256,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                         // One time state account initializer. Will fail on subsequent
                         // invocations.
                         #[inline(never)]
-                        pub fn __ctor(program_id: &Pubkey, accounts: &[AccountInfo], ix_data: &[u8]) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
+                        pub fn __ctor(program_id: &Pubkey, accounts: &[AccountInfo], ix_data: &[u8]) -> ProgramResult {
                             // Deserialize instruction data.
                             let ix = instruction::state::#ix_name::deserialize(&mut &ix_data[..])
                                 .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;
@@ -355,7 +355,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                     program_id: &Pubkey,
                                     accounts: &[AccountInfo],
                                     ix_data: &[u8],
-                                ) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
+                                ) -> ::anchor_lang::DynAnchorResult {
                                     // Deserialize instruction.
                                     let ix = instruction::state::#ix_name::deserialize(&mut &ix_data[..])
                                         .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;
@@ -398,7 +398,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                     program_id: &Pubkey,
                                     accounts: &[AccountInfo],
                                     ix_data: &[u8],
-                                ) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
+                                ) -> ::anchor_lang::DynAnchorResult {
                                     // Deserialize instruction.
                                     let ix = instruction::state::#ix_name::deserialize(&mut &ix_data[..])
                                         .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;

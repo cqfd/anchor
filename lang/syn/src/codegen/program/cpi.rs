@@ -46,7 +46,8 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                         &ix,
                                         &acc_infos,
                                         ctx.signer_seeds(),
-                                    )
+                                    )?;
+                                    Ok(())
                                 }
                             }
                         })

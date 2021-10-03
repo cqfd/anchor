@@ -19,7 +19,6 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                             accounts,
                             ix_data,
                         ).map_err(|e| {
-                            ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
                             e.into()
                         })
                     }
@@ -51,7 +50,6 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                     accounts,
                                     ix_data,
                                 ).map_err(|e| {
-                                    ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
                                     e.into()
                                 })
                             }
@@ -89,7 +87,6 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                             accounts,
                                             ix_data,
                                         ).map_err(|e| {
-                                            ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
                                             e.into()
                                         })
                                     }
@@ -118,7 +115,6 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                         accounts,
                         ix_data,
                     ).map_err(|e| {
-                        ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
                         e.into()
                     })
                 }
@@ -127,7 +123,6 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
         .collect();
     let fallback_fn = gen_fallback(program).unwrap_or(quote! {
         let e = anchor_lang::__private::ErrorCode::InstructionFallbackNotFound;
-        ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
         Err(e.into())
     });
     quote! {
@@ -195,7 +190,7 @@ pub fn gen_fallback(program: &Program) -> Option<proc_macro2::TokenStream> {
         let method = &fallback_fn.raw_method;
         let fn_name = &method.sig.ident;
         quote! {
-            #program_name::#fn_name(program_id, accounts, data)
+            #program_name::#fn_name(program_id, accounts, data).map_err(Into::into)
         }
     })
 }
