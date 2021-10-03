@@ -88,6 +88,24 @@ pub use anchor_derive_accounts::Accounts;
 pub use borsh::{BorshDeserialize as AnchorDeserialize, BorshSerialize as AnchorSerialize};
 pub use solana_program;
 
+pub trait AnchorError: std::fmt::Display {
+    fn to_program_error(&self) -> solana_program::program_error::ProgramError;
+}
+
+impl<E: AnchorError + 'static> From<E> for Box<dyn AnchorError> {
+    fn from(e: E) -> Self {
+        Box::new(e)
+    }
+}
+
+impl From<Box<dyn AnchorError>> for solana_program::program_error::ProgramError {
+    fn from(e: Box<dyn AnchorError>) -> solana_program::program_error::ProgramError {
+        e.into()
+    }
+}
+
+pub type DynAnchorResult = std::result::Result<(), Box<dyn AnchorError>>;
+
 pub type ProgramError = crate::error::Error;
 pub type ProgramResult = std::result::Result<(), ProgramError>;
 
@@ -250,9 +268,9 @@ pub mod prelude {
     pub use super::{
         access_control, account, declare_id, emit, error, event, interface, program, require,
         state, zero_copy, Account, AccountDeserialize, AccountSerialize, Accounts, AccountsExit,
-        AnchorDeserialize, AnchorSerialize, Context, CpiContext, Id, Key, Loader, Owner, Program,
-        ProgramAccount, ProgramError, ProgramResult, Signer, System, Sysvar, ToAccountInfo,
-        ToAccountInfos, ToAccountMetas, UncheckedAccount,
+        AnchorDeserialize, AnchorError, AnchorSerialize, Context, CpiContext, Id, Key, Loader,
+        Owner, Program, ProgramAccount, ProgramError, ProgramResult, Signer, System, Sysvar,
+        ToAccountInfo, ToAccountInfos, ToAccountMetas, UncheckedAccount,
     };
 
     #[allow(deprecated)]

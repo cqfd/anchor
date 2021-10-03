@@ -49,7 +49,7 @@ pub fn generate(error: Error) -> proc_macro2::TokenStream {
         /// `ProgramError` or a custom, user defined error code by utilizing
         /// its `From` implementation.
         #[doc(hidden)]
-        #[derive(thiserror::Error, Debug)]
+        #[derive(thiserror::Error, Clone, Debug)]
         pub enum Error {
             #[error(transparent)]
             ProgramError(#[from] anchor_lang::solana_program::program_error::ProgramError),
@@ -84,6 +84,18 @@ pub fn generate(error: Error) -> proc_macro2::TokenStream {
             fn from(e: #enum_name) -> anchor_lang::solana_program::program_error::ProgramError {
                 let err: Error = e.into();
                 err.into()
+            }
+        }
+
+        impl anchor_lang::AnchorError for #enum_name {
+            fn to_program_error(&self) -> anchor_lang::solana_program::program_error::ProgramError {
+                self.clone().into()
+            }
+        }
+
+        impl anchor_lang::AnchorError for Error {
+            fn to_program_error(&self) -> anchor_lang::solana_program::program_error::ProgramError {
+                self.clone().into()
             }
         }
     }

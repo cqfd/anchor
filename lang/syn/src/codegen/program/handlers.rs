@@ -600,7 +600,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                     program_id: &Pubkey,
                     accounts: &[AccountInfo],
                     ix_data: &[u8],
-                ) -> ::anchor_lang::ProgramResult {
+                ) -> ::anchor_lang::DynAnchorResult {
                     // Deserialize data.
                     let ix = instruction::#ix_name::deserialize(&mut &ix_data[..])
                         .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;
@@ -621,7 +621,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                     )?;
 
                     // Exit routine.
-                    accounts.exit(program_id)
+                    Ok(accounts.exit(program_id)?)
                 }
             }
         })
