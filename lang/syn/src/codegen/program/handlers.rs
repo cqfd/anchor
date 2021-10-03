@@ -182,7 +182,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                     generate_ctor_variant_name().parse().unwrap();
                 if state.is_zero_copy {
                     quote! {
-                        // One time state account initializer. Will faill on subsequent
+                        // One time state account initializer. Will fail on subsequent
                         // invocations.
                         #[inline(never)]
                         pub fn __ctor(program_id: &Pubkey, accounts: &[AccountInfo], ix_data: &[u8]) -> ProgramResult {
@@ -253,10 +253,10 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                     }
                 } else {
                     quote! {
-                        // One time state account initializer. Will faill on subsequent
+                        // One time state account initializer. Will fail on subsequent
                         // invocations.
                         #[inline(never)]
-                        pub fn __ctor(program_id: &Pubkey, accounts: &[AccountInfo], ix_data: &[u8]) -> ProgramResult {
+                        pub fn __ctor(program_id: &Pubkey, accounts: &[AccountInfo], ix_data: &[u8]) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
                             // Deserialize instruction data.
                             let ix = instruction::state::#ix_name::deserialize(&mut &ix_data[..])
                                 .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;
@@ -355,7 +355,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                     program_id: &Pubkey,
                                     accounts: &[AccountInfo],
                                     ix_data: &[u8],
-                                ) -> ProgramResult {
+                                ) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
                                     // Deserialize instruction.
                                     let ix = instruction::state::#ix_name::deserialize(&mut &ix_data[..])
                                         .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;
@@ -398,7 +398,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                     program_id: &Pubkey,
                                     accounts: &[AccountInfo],
                                     ix_data: &[u8],
-                                ) -> ProgramResult {
+                                ) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
                                     // Deserialize instruction.
                                     let ix = instruction::state::#ix_name::deserialize(&mut &ix_data[..])
                                         .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;
@@ -510,7 +510,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                             program_id: &Pubkey,
                                             accounts: &[AccountInfo],
                                             ix_data: &[u8],
-                                        ) -> ProgramResult {
+                                        ) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
                                             // Deserialize instruction.
                                             #deserialize_instruction
 
@@ -554,7 +554,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                             program_id: &Pubkey,
                                             accounts: &[AccountInfo],
                                             ix_data: &[u8],
-                                        ) -> ProgramResult {
+                                        ) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
                                             // Deserialize instruction.
                                             #deserialize_instruction
 
@@ -600,7 +600,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                     program_id: &Pubkey,
                     accounts: &[AccountInfo],
                     ix_data: &[u8],
-                ) -> ProgramResult {
+                ) -> ::anchor_lang::ProgramResult {
                     // Deserialize data.
                     let ix = instruction::#ix_name::deserialize(&mut &ix_data[..])
                         .map_err(|_| anchor_lang::__private::ErrorCode::InstructionDidNotDeserialize)?;

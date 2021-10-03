@@ -52,7 +52,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
         /// The `entry` function here, defines the standard entry to a Solana
         /// program, where execution begins.
         #[cfg(not(feature = "no-entrypoint"))]
-        pub fn entry(program_id: &Pubkey, accounts: &[AccountInfo], data: &[u8]) -> ProgramResult {
+        pub fn entry(program_id: &Pubkey, accounts: &[AccountInfo], data: &[u8]) -> ::anchor_lang::solana_program::entrypoint::ProgramResult {
             #[cfg(feature = "anchor-debug")]
             {
                 msg!("anchor-debug is active");
@@ -64,7 +64,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
             dispatch(program_id, accounts, data)
                 .map_err(|e| {
                     anchor_lang::solana_program::msg!(&e.to_string());
-                    e
+                    e.into()
                 })
         }
 
@@ -76,11 +76,11 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
             pub struct #name;
 
             impl anchor_lang::AccountDeserialize for #name {
-                fn try_deserialize(buf: &mut &[u8]) -> std::result::Result<Self, anchor_lang::solana_program::program_error::ProgramError> {
+                fn try_deserialize(buf: &mut &[u8]) -> std::result::Result<Self, anchor_lang::ProgramError> {
                     #name::try_deserialize_unchecked(buf)
                 }
 
-                fn try_deserialize_unchecked(_buf: &mut &[u8]) -> std::result::Result<Self, anchor_lang::solana_program::program_error::ProgramError> {
+                fn try_deserialize_unchecked(_buf: &mut &[u8]) -> std::result::Result<Self, anchor_lang::ProgramError> {
                     Ok(#name)
                 }
             }

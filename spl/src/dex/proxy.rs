@@ -4,6 +4,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::program;
 use anchor_lang::solana_program::pubkey::Pubkey;
 use serum_dex::instruction::*;
+use solana_program::entrypoint::ProgramResult;
 
 /// MarketProxy provides an abstraction for implementing proxy programs to the
 /// Serum orderbook, allowing one to implement a middleware for the purposes

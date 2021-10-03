@@ -6,6 +6,7 @@ use anchor_lang::Accounts;
 use serum_dex::instruction::*;
 use serum_dex::matching::Side;
 use serum_dex::state::OpenOrders;
+use solana_program::entrypoint::ProgramResult;
 use std::mem::size_of;
 
 /// Per request context. Can be used to share data between middleware handlers.

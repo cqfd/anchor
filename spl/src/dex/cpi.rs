@@ -1,6 +1,5 @@
 use anchor_lang::solana_program::account_info::AccountInfo;
 use anchor_lang::solana_program::entrypoint::ProgramResult;
-use anchor_lang::solana_program::program_error::ProgramError;
 use anchor_lang::solana_program::pubkey::Pubkey;
 use anchor_lang::{Accounts, CpiContext, ToAccountInfos};
 use serum_dex::instruction::SelfTradeBehavior;
@@ -288,17 +287,17 @@ pub struct InitializeMarket<'info> {
 pub struct Dex;
 
 impl anchor_lang::AccountDeserialize for Dex {
-    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, ProgramError> {
-        Dex::try_deserialize_unchecked(buf)
+    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
+        Dex::try_deserialize_unchecked(buf).map_err(Into::into)
     }
 
-    fn try_deserialize_unchecked(_buf: &mut &[u8]) -> Result<Self, ProgramError> {
+    fn try_deserialize_unchecked(_buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
         Ok(Dex)
     }
 }
 
 impl anchor_lang::AccountSerialize for Dex {
-    fn try_serialize<W: Write>(&self, _writer: &mut W) -> Result<(), ProgramError> {
+    fn try_serialize<W: Write>(&self, _writer: &mut W) -> Result<(), anchor_lang::ProgramError> {
         // no-op
         Ok(())
     }

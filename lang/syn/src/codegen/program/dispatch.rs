@@ -18,7 +18,10 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                             program_id,
                             accounts,
                             ix_data,
-                        )
+                        ).map_err(|e| {
+                            ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
+                            e.into()
+                        })
                     }
                 }
             }
@@ -47,7 +50,10 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                     program_id,
                                     accounts,
                                     ix_data,
-                                )
+                                ).map_err(|e| {
+                                    ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
+                                    e.into()
+                                })
                             }
                         }
                     })
@@ -82,7 +88,10 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                                             program_id,
                                             accounts,
                                             ix_data,
-                                        )
+                                        ).map_err(|e| {
+                                            ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
+                                            e.into()
+                                        })
                                     }
                                 }
                             })
@@ -108,13 +117,18 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                         program_id,
                         accounts,
                         ix_data,
-                    )
+                    ).map_err(|e| {
+                        ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
+                        e.into()
+                    })
                 }
             }
         })
         .collect();
     let fallback_fn = gen_fallback(program).unwrap_or(quote! {
-        Err(anchor_lang::__private::ErrorCode::InstructionFallbackNotFound.into())
+        let e = anchor_lang::__private::ErrorCode::InstructionFallbackNotFound;
+        ::anchor_lang::solana_program::msg!("Alan was here: {}", e);
+        Err(e.into())
     });
     quote! {
         /// Performs method dispatch.

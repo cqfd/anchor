@@ -20,9 +20,14 @@ pub mod misc2 {
             })
         }
 
-        pub fn set_data(&mut self, ctx: Context<Auth>, data: u64) -> Result<(), ProgramError> {
+        pub fn set_data(
+            &mut self,
+            ctx: Context<Auth>,
+            data: u64,
+        ) -> Result<(), anchor_lang::solana_program::program_error::ProgramError> {
             if self.auth != *ctx.accounts.authority.key {
-                return Err(ProgramError::Custom(1234)); // Arbitrary error code.
+                return Err(anchor_lang::solana_program::program_error::ProgramError::Custom(1234));
+                // Arbitrary error code.
             }
             self.data = data;
             Ok(())

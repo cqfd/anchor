@@ -92,7 +92,7 @@ pub fn generate(accs: &AccountsStruct) -> proc_macro2::TokenStream {
                 program_id: &anchor_lang::solana_program::pubkey::Pubkey,
                 accounts: &mut &[anchor_lang::solana_program::account_info::AccountInfo<'info>],
                 ix_data: &[u8],
-            ) -> std::result::Result<Self, anchor_lang::solana_program::program_error::ProgramError> {
+            ) -> std::result::Result<Self, anchor_lang::ProgramError> {
                 // Deserialize instruction, if declared.
                 #ix_de
                 // Deserialize each account.

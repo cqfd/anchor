@@ -25,9 +25,9 @@ extern crate self as anchor_lang;
 
 use bytemuck::{Pod, Zeroable};
 use solana_program::account_info::AccountInfo;
-use solana_program::entrypoint::ProgramResult;
+// use solana_program::entrypoint::ProgramResult;
 use solana_program::instruction::AccountMeta;
-use solana_program::program_error::ProgramError;
+// use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use std::io::Write;
 
@@ -88,6 +88,9 @@ pub use anchor_derive_accounts::Accounts;
 pub use borsh::{BorshDeserialize as AnchorDeserialize, BorshSerialize as AnchorSerialize};
 pub use solana_program;
 
+pub type ProgramError = crate::error::Error;
+pub type ProgramResult = std::result::Result<(), ProgramError>;
+
 /// A data structure of validated accounts that can be deserialized from the
 /// input to a Solana program. Implementations of this trait should perform any
 /// and all requisite constraint checks on accounts to ensure the accounts
@@ -110,7 +113,7 @@ pub trait Accounts<'info>: ToAccountMetas + ToAccountInfos<'info> + Sized {
         program_id: &Pubkey,
         accounts: &mut &[AccountInfo<'info>],
         ix_data: &[u8],
-    ) -> Result<Self, ProgramError>;
+    ) -> Result<Self, crate::error::Error>;
 }
 
 /// The exit procedure for an account. Any cleanup or persistence to storage
@@ -248,8 +251,8 @@ pub mod prelude {
         access_control, account, declare_id, emit, error, event, interface, program, require,
         state, zero_copy, Account, AccountDeserialize, AccountSerialize, Accounts, AccountsExit,
         AnchorDeserialize, AnchorSerialize, Context, CpiContext, Id, Key, Loader, Owner, Program,
-        ProgramAccount, Signer, System, Sysvar, ToAccountInfo, ToAccountInfos, ToAccountMetas,
-        UncheckedAccount,
+        ProgramAccount, ProgramError, ProgramResult, Signer, System, Sysvar, ToAccountInfo,
+        ToAccountInfos, ToAccountMetas, UncheckedAccount,
     };
 
     #[allow(deprecated)]
@@ -257,10 +260,10 @@ pub mod prelude {
 
     pub use borsh;
     pub use solana_program::account_info::{next_account_info, AccountInfo};
-    pub use solana_program::entrypoint::ProgramResult;
+    // pub use solana_program::entrypoint::ProgramResult;
     pub use solana_program::instruction::AccountMeta;
     pub use solana_program::msg;
-    pub use solana_program::program_error::ProgramError;
+    // pub use solana_program::program_error::ProgramError;
     pub use solana_program::pubkey::Pubkey;
     pub use solana_program::sysvar::clock::Clock;
     pub use solana_program::sysvar::epoch_schedule::EpochSchedule;
@@ -279,7 +282,8 @@ pub mod prelude {
 // Internal module used by macros and unstable apis.
 #[doc(hidden)]
 pub mod __private {
-    use solana_program::program_error::ProgramError;
+    use crate::ProgramError;
+    // use solana_program::program_error::ProgramError;
     use solana_program::pubkey::Pubkey;
 
     pub use crate::ctor::Ctor;

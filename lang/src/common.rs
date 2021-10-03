@@ -1,6 +1,7 @@
 use crate::error::ErrorCode;
 use solana_program::account_info::AccountInfo;
-use solana_program::entrypoint::ProgramResult;
+// use solana_program::entrypoint::ProgramResult;
+use crate::ProgramResult;
 use std::io::Write;
 
 pub fn close<'info>(

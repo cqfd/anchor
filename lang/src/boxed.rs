@@ -1,8 +1,9 @@
 use crate::{Accounts, AccountsExit, ToAccountInfos, ToAccountMetas};
 use solana_program::account_info::AccountInfo;
-use solana_program::entrypoint::ProgramResult;
+// use solana_program::entrypoint::ProgramResult;
+use crate::{ProgramError, ProgramResult};
 use solana_program::instruction::AccountMeta;
-use solana_program::program_error::ProgramError;
+// use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use std::ops::Deref;
 

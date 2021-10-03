@@ -265,17 +265,19 @@ impl TokenAccount {
 }
 
 impl anchor_lang::AccountDeserialize for TokenAccount {
-    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, ProgramError> {
+    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
         TokenAccount::try_deserialize_unchecked(buf)
     }
 
-    fn try_deserialize_unchecked(buf: &mut &[u8]) -> Result<Self, ProgramError> {
-        spl_token::state::Account::unpack(buf).map(TokenAccount)
+    fn try_deserialize_unchecked(buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
+        spl_token::state::Account::unpack(buf)
+            .map(TokenAccount)
+            .map_err(Into::into)
     }
 }
 
 impl anchor_lang::AccountSerialize for TokenAccount {
-    fn try_serialize<W: Write>(&self, _writer: &mut W) -> Result<(), ProgramError> {
+    fn try_serialize<W: Write>(&self, _writer: &mut W) -> Result<(), anchor_lang::ProgramError> {
         // no-op
         Ok(())
     }
@@ -303,17 +305,19 @@ impl Mint {
 }
 
 impl anchor_lang::AccountDeserialize for Mint {
-    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, ProgramError> {
-        Mint::try_deserialize_unchecked(buf)
+    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
+        Mint::try_deserialize_unchecked(buf).map_err(Into::into)
     }
 
-    fn try_deserialize_unchecked(buf: &mut &[u8]) -> Result<Self, ProgramError> {
-        spl_token::state::Mint::unpack(buf).map(Mint)
+    fn try_deserialize_unchecked(buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
+        spl_token::state::Mint::unpack(buf)
+            .map(Mint)
+            .map_err(Into::into)
     }
 }
 
 impl anchor_lang::AccountSerialize for Mint {
-    fn try_serialize<W: Write>(&self, _writer: &mut W) -> Result<(), ProgramError> {
+    fn try_serialize<W: Write>(&self, _writer: &mut W) -> Result<(), anchor_lang::ProgramError> {
         // no-op
         Ok(())
     }
@@ -337,11 +341,11 @@ impl Deref for Mint {
 pub struct Token;
 
 impl anchor_lang::AccountDeserialize for Token {
-    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, ProgramError> {
-        Token::try_deserialize_unchecked(buf)
+    fn try_deserialize(buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
+        Token::try_deserialize_unchecked(buf).map_err(Into::into)
     }
 
-    fn try_deserialize_unchecked(_buf: &mut &[u8]) -> Result<Self, ProgramError> {
+    fn try_deserialize_unchecked(_buf: &mut &[u8]) -> Result<Self, anchor_lang::ProgramError> {
         Ok(Token)
     }
 }

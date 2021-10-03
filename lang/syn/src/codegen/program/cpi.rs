@@ -73,7 +73,7 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                     pub fn #method_name<'a, 'b, 'c, 'info>(
                         ctx: CpiContext<'a, 'b, 'c, 'info, #accounts_ident<'info>>,
                         #(#args),*
-                    ) -> ProgramResult {
+                    ) -> ::anchor_lang::ProgramResult {
                         let ix = {
                             let ix = instruction::#ix_variant;
                             let mut ix_data = AnchorSerialize::try_to_vec(&ix)
@@ -88,11 +88,11 @@ pub fn generate(program: &Program) -> proc_macro2::TokenStream {
                             }
                         };
                         let mut acc_infos = ctx.to_account_infos();
-                        anchor_lang::solana_program::program::invoke_signed(
+                        Ok(anchor_lang::solana_program::program::invoke_signed(
                             &ix,
                             &acc_infos,
                             ctx.signer_seeds,
-                        )
+                        )?)
                     }
                 }
             };

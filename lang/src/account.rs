@@ -1,12 +1,14 @@
 use crate::error::ErrorCode;
 use crate::*;
 use solana_program::account_info::AccountInfo;
-use solana_program::entrypoint::ProgramResult;
+// use solana_program::entrypoint::ProgramResult;
 use solana_program::instruction::AccountMeta;
-use solana_program::program_error::ProgramError;
+// use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use std::ops::{Deref, DerefMut};
 
+type ProgramError = crate::error::Error;
+type ProgramResult = std::result::Result<(), ProgramError>;
 /// Account container that checks ownership on deserialization.
 #[derive(Clone)]
 pub struct Account<'info, T: AccountSerialize + AccountDeserialize + Owner + Clone> {

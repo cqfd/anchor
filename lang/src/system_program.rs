@@ -1,5 +1,5 @@
 use crate::*;
-use solana_program::program_error::ProgramError;
+// use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 
 pub use solana_program::system_program::ID;

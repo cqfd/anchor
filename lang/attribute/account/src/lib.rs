@@ -140,7 +140,7 @@ pub fn account(
                 // It's expected on-chain programs deserialize via zero-copy.
                 #[automatically_derived]
                 impl #impl_gen anchor_lang::AccountDeserialize for #account_name #type_gen #where_clause {
-                    fn try_deserialize(buf: &mut &[u8]) -> std::result::Result<Self, ProgramError> {
+                    fn try_deserialize(buf: &mut &[u8]) -> std::result::Result<Self, ::anchor_lang::ProgramError> {
                         if buf.len() < #discriminator.len() {
                             return Err(anchor_lang::__private::ErrorCode::AccountDiscriminatorNotFound.into());
                         }
@@ -151,7 +151,7 @@ pub fn account(
                         Self::try_deserialize_unchecked(buf)
                     }
 
-                    fn try_deserialize_unchecked(buf: &mut &[u8]) -> std::result::Result<Self, ProgramError> {
+                    fn try_deserialize_unchecked(buf: &mut &[u8]) -> std::result::Result<Self, ::anchor_lang::ProgramError> {
                         let data: &[u8] = &buf[8..];
                         // Re-interpret raw bytes into the POD data structure.
                         let account = anchor_lang::__private::bytemuck::from_bytes(data);
@@ -169,7 +169,7 @@ pub fn account(
 
                 #[automatically_derived]
                 impl #impl_gen anchor_lang::AccountSerialize for #account_name #type_gen #where_clause {
-                    fn try_serialize<W: std::io::Write>(&self, writer: &mut W) -> std::result::Result<(), ProgramError> {
+                    fn try_serialize<W: std::io::Write>(&self, writer: &mut W) -> std::result::Result<(), ::anchor_lang::ProgramError> {
                         writer.write_all(&#discriminator).map_err(|_| anchor_lang::__private::ErrorCode::AccountDidNotSerialize)?;
                         AnchorSerialize::serialize(
                             self,
@@ -182,7 +182,7 @@ pub fn account(
 
                 #[automatically_derived]
                 impl #impl_gen anchor_lang::AccountDeserialize for #account_name #type_gen #where_clause {
-                    fn try_deserialize(buf: &mut &[u8]) -> std::result::Result<Self, ProgramError> {
+                    fn try_deserialize(buf: &mut &[u8]) -> std::result::Result<Self, ::anchor_lang::ProgramError> {
                         if buf.len() < #discriminator.len() {
                             return Err(anchor_lang::__private::ErrorCode::AccountDiscriminatorNotFound.into());
                         }
@@ -193,7 +193,7 @@ pub fn account(
                         Self::try_deserialize_unchecked(buf)
                     }
 
-                    fn try_deserialize_unchecked(buf: &mut &[u8]) -> std::result::Result<Self, ProgramError> {
+                    fn try_deserialize_unchecked(buf: &mut &[u8]) -> std::result::Result<Self, ::anchor_lang::ProgramError> {
                         let mut data: &[u8] = &buf[8..];
                         AnchorDeserialize::deserialize(&mut data)
                             .map_err(|_| anchor_lang::__private::ErrorCode::AccountDidNotDeserialize.into())
