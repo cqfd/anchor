@@ -6,6 +6,15 @@ describe("basic-1", () => {
   // Use a local provider.
   const provider = anchor.Provider.local();
 
+  const user = anchor.web3.Keypair.generate();
+
+  before(async () => {
+    await provider.connection.requestAirdrop(
+      user.publicKey,
+      anchor.web3.LAMPORTS_PER_SOL
+    )
+  });
+
   // Configure the client to use the local cluster.
   anchor.setProvider(provider);
 
@@ -22,10 +31,10 @@ describe("basic-1", () => {
     await program.rpc.initialize(new anchor.BN(1234), {
       accounts: {
         myAccount: myAccount.publicKey,
-        user: provider.wallet.publicKey,
+        user: user.publicKey,
         systemProgram: SystemProgram.programId,
       },
-      signers: [myAccount],
+      signers: [myAccount, user],
     });
     // #endregion code-simplified
 

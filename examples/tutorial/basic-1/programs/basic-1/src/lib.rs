@@ -23,7 +23,7 @@ mod basic_1 {
 pub struct Initialize<'info> {
     #[account(init, payer = user, space = 8 + 8)]
     pub my_account: Account<'info, MyAccount>,
-    #[account(mut)]
+    // #[account(mut)]
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
