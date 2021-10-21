@@ -12,6 +12,20 @@ describe("basic-1", () => {
 
   const program = anchor.workspace.Basic1;
 
+  it("Can do zero copy stuff", async () => {
+    let zeroCopy = anchor.web3.Keypair.generate();
+    await program.rpc.zeroCopy({
+      accounts: {
+        zeroCopy: zeroCopy.publicKey,
+        user: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      },
+      signers: [zeroCopy]
+    });
+
+    let zeroCopyAccount = await provider.connection.getAccountInfo(zeroCopy.publicKey);
+    console.log(zeroCopyAccount);
+  });
 
   it("Can do mint stuff", async () => {
 

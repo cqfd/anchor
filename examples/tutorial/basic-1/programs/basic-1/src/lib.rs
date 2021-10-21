@@ -1,7 +1,12 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::system_program};
 use anchor_spl::token::{Mint, Token, TokenAccount};
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+
+#[test]
+fn size() {
+    eprintln!("{}", std::mem::size_of::<Pubkey>());
+}
 
 #[program]
 mod basic_1 {
@@ -51,6 +56,29 @@ mod basic_1 {
             1,
         )
     }
+
+    pub fn zero_copy(ctx: Context<ZeroCopy>) -> ProgramResult {
+        let mut zero_copy = ctx.accounts.zero_copy.load_init()?;
+        msg!("key = {:?}", ctx.accounts.system_program.key().to_bytes());
+        zero_copy.pk = ctx.accounts.system_program.key();
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct ZeroCopy<'info> {
+    #[account(init, payer = user, space = 8 + 32)]
+    pub zero_copy: AccountLoader<'info, Thing>,
+
+    #[account(mut)]
+    pub user: Signer<'info>,
+
+    pub system_program: Program<'info, System>,
+}
+
+#[account(zero_copy)]
+pub struct Thing {
+    pk: Pubkey,
 }
 
 #[derive(Accounts)]
