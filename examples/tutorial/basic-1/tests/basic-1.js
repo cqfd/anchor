@@ -16,16 +16,28 @@ describe("basic-1", () => {
 
     // The Account to create.
     const myAccount = anchor.web3.Keypair.generate();
+    const myOtherAccount = anchor.web3.Keypair.generate();
 
     // Create the new account and initialize it with the program.
+    let bigSpace = 8 + 2097152;
     // #region code-simplified
     await program.rpc.initialize(new anchor.BN(1234), {
       accounts: {
         myAccount: myAccount.publicKey,
+        myOtherAccount: myOtherAccount.publicKey,
         user: provider.wallet.publicKey,
         systemProgram: SystemProgram.programId,
       },
-      signers: [myAccount],
+      signers: [myAccount, myOtherAccount],
+      instructions: [
+        anchor.web3.SystemProgram.createAccount({
+          fromPubkey: program.provider.wallet.publicKey,
+          lamports: await program.provider.connection.getMinimumBalanceForRentExemption(bigSpace),
+          newAccountPubkey: myOtherAccount.publicKey,
+          programId: program.programId,
+          space: bigSpace
+        })
+      ]
     });
     // #endregion code-simplified
 
